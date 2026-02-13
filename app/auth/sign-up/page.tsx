@@ -334,333 +334,443 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Back Button */}
-        <Link 
-          href="/auth/login" 
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Login
+    <div className="w-full h-screen lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px] bg-slate-50 font-sans selection:bg-teal-200 selection:text-teal-900">
+      
+      {/* Left Side - Branding & Visuals (Same as Login) */}
+      <div className="relative hidden h-full flex-col justify-between overflow-hidden bg-[#012e28] p-10 lg:flex">
+        
+        {/* Background Blobs */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
+        {/* Logo */}
+        <Link href="/" className="relative z-20 flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <Image
+                        src="/Byberr 1.svg"   
+                        alt="Byberr"
+                        width={82}
+                        height={32}
+                        className="w-18 h-8 object-contain" // Keeps it the same size as the old box  
+                      />
         </Link>
 
-        {/* Signup Form */}
-        <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold tracking-tight">Create Account</h1>
-            <p className="text-muted-foreground text-sm mt-2">
-              Join as a Creator or Business to start collaborating
-            </p>
+        {/* Graph Illustration */}
+        <div className="relative z-20 flex-1 flex items-center justify-center">
+          <div className="w-full max-w-md h-64 relative">
+            {/* Graph Grid */}
+            <div className="absolute inset-0 flex flex-col justify-between">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="w-full h-px bg-white/10"></div>
+              ))}
+            </div>
+            <div className="absolute inset-0 flex justify-between">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="h-full w-px bg-white/10"></div>
+              ))}
+            </div>
+            
+            {/* Graph Lines */}
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 256" fill="none">
+              {/* Line 1 - Growth curve */}
+              <path d="M 20 200 Q 100 180 150 120 T 280 60 L 380 40" 
+                    stroke="white" strokeWidth="3" fill="none" opacity="0.8"/>
+              
+              {/* Line 2 - Steady growth */}
+              <path d="M 20 220 L 100 200 L 180 160 L 260 140 L 340 100 L 380 80" 
+                    stroke="white" strokeWidth="3" fill="none" opacity="0.6"/>
+              
+              {/* Line 3 - Moderate growth */}
+              <path d="M 20 180 L 100 170 L 180 150 L 260 130 L 340 110 L 380 100" 
+                    stroke="white" strokeWidth="3" fill="none" opacity="0.4"/>
+              
+              {/* Data points */}
+              {[20, 100, 180, 260, 340, 380].map((x, i) => (
+                <circle key={`points1-${i}`} cx={x} cy={200 - i * 30} r="4" fill="white" opacity="0.8"/>
+              ))}
+              {[20, 100, 180, 260, 340, 380].map((x, i) => (
+                <circle key={`points2-${i}`} cx={x} cy={220 - i * 20} r="4" fill="white" opacity="0.6"/>
+              ))}
+            </svg>
+            
+            {/* Graph Labels */}
+            <div className="absolute bottom-0 left-0 text-xs text-white/60 font-medium">Growth</div>
+            <div className="absolute bottom-0 right-0 text-xs text-white/60 font-medium">Time</div>
           </div>
+        </div>
 
-          {!showOnboarding ? (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* User Type Selection */}
-              <div className="space-y-2">
-                <Label htmlFor="userType">Account Type</Label>
-                <Select value={userType} onValueChange={setUserType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select account type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="creator">Creator</SelectItem>
-                    <SelectItem value="business">Business</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Email Field */}
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* Password Fields */}
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Create a password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="repeatPassword">Confirm Password</Label>
-                <Input
-                  id="repeatPassword"
-                  type="password"
-                  placeholder="Confirm your password"
-                  value={repeatPassword}
-                  onChange={(e) => setRepeatPassword(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* Instagram Connect Button */}
-              <Button 
-                type="button"
-                variant="outline"
-                className="w-full h-12"
-                onClick={handleInstagramSignup}
-                disabled={!metaAppId}
-              >
-                <Instagram className="mr-2 h-4 w-4 text-pink-600" />
-                Continue with Instagram
-              </Button>
-
-              {error && (
-                <div className="text-destructive text-sm text-center">
-                  {error}
+        {/* Hero Text / Testimonial */}
+        <div className="relative z-20 mt-auto">
+          <blockquote className="space-y-4">
+            <div className="flex gap-1 text-teal-400">
+                {[1, 2, 3, 4, 5].map((i) => <span key={i} className="text-xl">★</span>)}
+             </div>
+            <p className="text-2xl font-medium leading-relaxed text-slate-100">
+              &ldquo;Join thousands of creators and brands collaborating seamlessly on Byberr.&rdquo;
+            </p>
+            <footer className="flex items-center gap-3 pt-2">
+                <div className="w-10 h-10 rounded-full bg-teal-800/50 border border-teal-700 flex items-center justify-center text-teal-200 font-bold text-sm">BT</div>
+                <div className="text-sm">
+                    <div className="font-semibold text-white">The Byberr Team</div>
+                    <div className="text-teal-200/60">Join Our Community</div>
                 </div>
-              )}
+            </footer>
+          </blockquote>
+        </div>
+      </div>
 
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground">
-                  Already have an account?{" "}
-                  <Link href="/auth/login" className="text-primary hover:underline">
-                    Sign in
-                  </Link>
+      {/* Right Side - Signup Form */}
+      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-slate-50 relative">
+        <div className="mx-auto grid w-full max-w-[420px] gap-6 relative z-10">
+          
+          {/* Card Container - White & Subtle */}
+          <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-200">
+             
+             {/* Back Link */}
+             <div className="flex justify-start mb-6">
+                <Link 
+                  href="/auth/login" 
+                  className="text-sm font-medium text-slate-500 hover:text-teal-600 flex items-center gap-2 transition-colors"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Login
+                </Link>
+             </div>
+
+             {/* Header */}
+             <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900 mb-2">Create Account</h1>
+                <p className="text-slate-500 text-sm">
+                  Join as a Creator or Business to start collaborating
                 </p>
-              </div>
-            </form>
-          ) : (
-            /* Onboarding Modal */
-            <div className="space-y-6">
-              <div className="text-center">
-                <h2 className="text-xl font-semibold">Complete Your Profile</h2>
-                <p className="text-muted-foreground text-sm mt-2">
-                  Please provide the following information to complete your account setup
-                </p>
-              </div>
+             </div>
 
-              {/* Onboarding Form Fields */}
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {/* Email */}
-                <div className="space-y-2">
-                  <Label htmlFor="onboardingEmail">Email</Label>
-                  <Input
-                    id="onboardingEmail"
-                    type="email"
-                    placeholder="Your email address"
-                    value={onboardingData.email}
-                    onChange={(e) => handleOnboardingChange('email', e.target.value)}
-                  />
-                </div>
+             {/* Form Content */}
+             <div className="grid gap-5">
+              {!showOnboarding ? (
+                <>
+                  {/* User Type Selection */}
+                  <div className="grid gap-2">
+                    <Label htmlFor="userType" className="text-slate-700 font-semibold">Account Type</Label>
+                    <Select value={userType} onValueChange={setUserType}>
+                      <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                        <SelectValue placeholder="Select account type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="creator">Creator</SelectItem>
+                        <SelectItem value="business">Business</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                {/* Phone */}
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+91 98765 43210"
-                    value={onboardingData.phone}
-                    onChange={(e) => handleOnboardingChange('phone', e.target.value)}
-                  />
-                </div>
-
-                {/* Country */}
-                <div className="space-y-2">
-                  <Label htmlFor="country">Country</Label>
-                  <Input
-                    id="country"
-                    placeholder="India"
-                    value={onboardingData.country}
-                    onChange={(e) => handleOnboardingChange('country', e.target.value)}
-                  />
-                </div>
-
-                {/* State and City */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="state">State</Label>
+                  {/* Email Field */}
+                  <div className="grid gap-2">
+                    <Label htmlFor="email" className="text-slate-700 font-semibold">Email</Label>
                     <Input
-                      id="state"
-                      placeholder="Maharashtra"
-                      value={onboardingData.state}
-                      onChange={(e) => handleOnboardingChange('state', e.target.value)}
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="city">City</Label>
+
+                  {/* Password Fields */}
+                  <div className="grid gap-2">
+                    <Label htmlFor="password" className="text-slate-700 font-semibold">Password</Label>
                     <Input
-                      id="city"
-                      placeholder="Mumbai"
-                      value={onboardingData.city}
-                      onChange={(e) => handleOnboardingChange('city', e.target.value)}
+                      id="password"
+                      type="password"
+                      placeholder="Create a password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
                     />
                   </div>
-                </div>
 
-                {/* Pincode */}
-                <div className="space-y-2">
-                  <Label htmlFor="pincode">Pincode</Label>
-                  <div className="relative">
+                  <div className="grid gap-2">
+                    <Label htmlFor="repeatPassword" className="text-slate-700 font-semibold">Confirm Password</Label>
                     <Input
-                      id="pincode"
-                      placeholder="400001"
-                      value={onboardingData.pincode}
-                      onChange={(e) => handleOnboardingChange('pincode', e.target.value)}
-                      onBlur={() => onboardingData.pincode.length === 6 && validatePincode(onboardingData.pincode)}
+                      id="repeatPassword"
+                      type="password"
+                      placeholder="Confirm your password"
+                      value={repeatPassword}
+                      onChange={(e) => setRepeatPassword(e.target.value)}
+                      required
+                      className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
                     />
-                    {isValidatingPin && (
-                      <div className="absolute right-3 top-3">
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                  </div>
+
+                  {/* Instagram Connect Button */}
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    className="w-full h-12"
+                    onClick={handleInstagramSignup}
+                    disabled={!metaAppId}
+                  >
+                    <Instagram className="mr-2 h-4 w-4 text-pink-600" />
+                    Continue with Instagram
+                  </Button>
+
+                  {error && (
+                    <div className="text-sm text-red-600 bg-red-50 border border-red-100 p-3 rounded-xl flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                        {error}
+                    </div>
+                  )}
+
+                  <div className="text-center">
+                    <p className="text-sm text-slate-500">
+                      Already have an account?{" "}
+                      <Link href="/auth/login" className="text-teal-600 hover:text-teal-700 hover:underline font-medium">
+                        Sign in
+                      </Link>
+                    </p>
+                  </div>
+                </>
+              ) : (
+                /* Onboarding Modal */
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <h2 className="text-xl font-semibold text-slate-900">Complete Your Profile</h2>
+                    <p className="text-slate-500 text-sm mt-2">
+                      Please provide the following information to complete your account setup
+                    </p>
+                  </div>
+
+                  {/* Onboarding Form Fields */}
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {/* Email */}
+                    <div className="space-y-2">
+                      <Label htmlFor="onboardingEmail" className="text-slate-700 font-semibold">Email</Label>
+                      <Input
+                        id="onboardingEmail"
+                        type="email"
+                        placeholder="Your email address"
+                        value={onboardingData.email}
+                        onChange={(e) => handleOnboardingChange('email', e.target.value)}
+                        className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                      />
+                    </div>
+
+                    {/* Phone */}
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-slate-700 font-semibold">Phone Number</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="+91 98765 43210"
+                        value={onboardingData.phone}
+                        onChange={(e) => handleOnboardingChange('phone', e.target.value)}
+                        className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                      />
+                    </div>
+
+                    {/* Country */}
+                    <div className="space-y-2">
+                      <Label htmlFor="country" className="text-slate-700 font-semibold">Country</Label>
+                      <Input
+                        id="country"
+                        placeholder="India"
+                        value={onboardingData.country}
+                        onChange={(e) => handleOnboardingChange('country', e.target.value)}
+                        className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                      />
+                    </div>
+
+                    {/* State and City */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="state" className="text-slate-700 font-semibold">State</Label>
+                        <Input
+                          id="state"
+                          placeholder="Maharashtra"
+                          value={onboardingData.state}
+                          onChange={(e) => handleOnboardingChange('state', e.target.value)}
+                          className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="city" className="text-slate-700 font-semibold">City</Label>
+                        <Input
+                          id="city"
+                          placeholder="Mumbai"
+                          value={onboardingData.city}
+                          onChange={(e) => handleOnboardingChange('city', e.target.value)}
+                          className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Pincode */}
+                    <div className="space-y-2">
+                      <Label htmlFor="pincode" className="text-slate-700 font-semibold">Pincode</Label>
+                      <div className="relative">
+                        <Input
+                          id="pincode"
+                          placeholder="400001"
+                          value={onboardingData.pincode}
+                          onChange={(e) => handleOnboardingChange('pincode', e.target.value)}
+                          onBlur={() => onboardingData.pincode.length === 6 && validatePincode(onboardingData.pincode)}
+                          className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                        />
+                        {isValidatingPin && (
+                          <div className="absolute right-3 top-3">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                      {pincodeError && (
+                        <p className="text-destructive text-xs mt-1">{pincodeError}</p>
+                      )}
+                    </div>
+
+                    {/* Website */}
+                    <div className="space-y-2">
+                      <Label htmlFor="website" className="text-slate-700 font-semibold">Website</Label>
+                      <Input
+                        id="website"
+                        type="url"
+                        placeholder="https://yourwebsite.com"
+                        value={onboardingData.website}
+                        onChange={(e) => handleOnboardingChange('website', e.target.value)}
+                        className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                      />
+                    </div>
+
+                    {/* Date of Birth */}
+                    <div className="space-y-2">
+                      <Label htmlFor="date_of_birth" className="text-slate-700 font-semibold">Date of Birth</Label>
+                      <Input
+                        id="date_of_birth"
+                        type="date"
+                        value={onboardingData.date_of_birth}
+                        onChange={(e) => handleOnboardingChange('date_of_birth', e.target.value)}
+                        className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                      />
+                    </div>
+
+                    {/* User Type Specific Fields */}
+                    {userType === 'creator' ? (
+                      <>
+                        {/* Niche */}
+                        <div className="space-y-2">
+                          <Label htmlFor="niche" className="text-slate-700 font-semibold">Content Niche</Label>
+                          <Select value={onboardingData.niche} onValueChange={(value) => handleOnboardingChange('niche', value)}>
+                            <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                              <SelectValue placeholder="Select your niche" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {CREATOR_NICHES.map((niche) => (
+                                <SelectItem key={niche} value={niche}>
+                                  {niche}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Content Style */}
+                        <div className="space-y-2">
+                          <Label htmlFor="content_style" className="text-slate-700 font-semibold">Content Style</Label>
+                          <Textarea
+                            id="content_style"
+                            placeholder="Describe your content style..."
+                            value={onboardingData.content_style}
+                            onChange={(e) => handleOnboardingChange('content_style', e.target.value)}
+                            rows={3}
+                            className="rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                          />
+                        </div>
+
+                        {/* Languages */}
+                        <div className="space-y-2">
+                          <Label htmlFor="languages" className="text-slate-700 font-semibold">Languages</Label>
+                          <Input
+                            id="languages"
+                            placeholder="English, Hindi, Marathi"
+                            value={onboardingData.languages}
+                            onChange={(e) => handleOnboardingChange('languages', e.target.value)}
+                            className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* Business Type */}
+                        <div className="space-y-2">
+                          <Label htmlFor="business_type" className="text-slate-700 font-semibold">Business Type</Label>
+                          <Select value={onboardingData.business_type} onValueChange={(value) => handleOnboardingChange('business_type', value)}>
+                            <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                              <SelectValue placeholder="Select business type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {BUSINESS_TYPES.map((type) => (
+                                <SelectItem key={type} value={type}>
+                                  {type}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Business Description */}
+                        <div className="space-y-2">
+                          <Label htmlFor="business_description" className="text-slate-700 font-semibold">Business Description</Label>
+                          <Textarea
+                            id="business_description"
+                            placeholder="Describe your business..."
+                            value={onboardingData.business_description}
+                            onChange={(e) => handleOnboardingChange('business_description', e.target.value)}
+                            rows={3}
+                            className="rounded-xl bg-slate-50 border-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 placeholder:text-slate-400 transition-all"
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    {error && (
+                      <div className="text-sm text-red-600 bg-red-50 border border-red-100 p-3 rounded-xl flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                          {error}
                       </div>
                     )}
                   </div>
-                  {pincodeError && (
-                    <p className="text-destructive text-xs mt-1">{pincodeError}</p>
-                  )}
-                </div>
 
-                {/* Website */}
-                <div className="space-y-2">
-                  <Label htmlFor="website">Website</Label>
-                  <Input
-                    id="website"
-                    type="url"
-                    placeholder="https://yourwebsite.com"
-                    value={onboardingData.website}
-                    onChange={(e) => handleOnboardingChange('website', e.target.value)}
-                  />
-                </div>
-
-                {/* Date of Birth */}
-                <div className="space-y-2">
-                  <Label htmlFor="date_of_birth">Date of Birth</Label>
-                  <Input
-                    id="date_of_birth"
-                    type="date"
-                    value={onboardingData.date_of_birth}
-                    onChange={(e) => handleOnboardingChange('date_of_birth', e.target.value)}
-                  />
-                </div>
-
-                {/* User Type Specific Fields */}
-                {userType === 'creator' ? (
-                  <>
-                    {/* Niche */}
-                    <div className="space-y-2">
-                      <Label htmlFor="niche">Content Niche</Label>
-                      <Select value={onboardingData.niche} onValueChange={(value) => handleOnboardingChange('niche', value)}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your niche" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {CREATOR_NICHES.map((niche) => (
-                            <SelectItem key={niche} value={niche}>
-                              {niche}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Content Style */}
-                    <div className="space-y-2">
-                      <Label htmlFor="content_style">Content Style</Label>
-                      <Textarea
-                        id="content_style"
-                        placeholder="Describe your content style..."
-                        value={onboardingData.content_style}
-                        onChange={(e) => handleOnboardingChange('content_style', e.target.value)}
-                        rows={3}
-                      />
-                    </div>
-
-                    {/* Languages */}
-                    <div className="space-y-2">
-                      <Label htmlFor="languages">Languages</Label>
-                      <Input
-                        id="languages"
-                        placeholder="English, Hindi, Marathi"
-                        value={onboardingData.languages}
-                        onChange={(e) => handleOnboardingChange('languages', e.target.value)}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {/* Business Type */}
-                    <div className="space-y-2">
-                      <Label htmlFor="business_type">Business Type</Label>
-                      <Select value={onboardingData.business_type} onValueChange={(value) => handleOnboardingChange('business_type', value)}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select business type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {BUSINESS_TYPES.map((type) => (
-                            <SelectItem key={type} value={type}>
-                              {type}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Business Description */}
-                    <div className="space-y-2">
-                      <Label htmlFor="business_description">Business Description</Label>
-                      <Textarea
-                        id="business_description"
-                        placeholder="Describe your business..."
-                        value={onboardingData.business_description}
-                        onChange={(e) => handleOnboardingChange('business_description', e.target.value)}
-                        rows={3}
-                      />
-                    </div>
-                  </>
-                )}
-
-                {error && (
-                  <div className="text-destructive text-sm">
-                    {error}
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 pt-4">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setShowOnboarding(false)}
+                      className="flex-1 h-12"
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      onClick={completeOnboarding}
+                      disabled={isLoading}
+                      className="flex-1 h-12"
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Completing...
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="w-4 h-4 mr-2" />
+                          Complete Profile
+                        </>
+                      )}
+                    </Button>
                   </div>
-                )}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-3 pt-4">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowOnboarding(false)}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={completeOnboarding}
-                  disabled={isLoading}
-                  className="flex-1"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Completing...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4 mr-2" />
-                      Complete Profile
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-          )}
+                </div>
+              )}
+             </div>
+          </div>
         </div>
       </div>
     </div>
