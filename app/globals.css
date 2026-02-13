@@ -1,0 +1,146 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Global light theme using the Byberr spring-green palette */
+:root {
+  /* Base surfaces & text */
+  --background: #f7fafc; /* Very light gray */
+  --foreground: #1a202c; /* Dark gray */
+  --card: #ffffff;
+  --card-foreground: #1a202c;
+  --popover: #ffffff;
+  --popover-foreground: #1a202c;
+
+  /* Brand & accents */
+  --primary: #00e27e; /* spring-green */
+  --primary-light: #a0f2d4;
+  --primary-dark: #00a85f;
+  --primary-foreground: #1a202c;
+  --secondary: #0fab70; /* mountain-meadow */
+  --secondary-light: #a0e6d3;
+  --secondary-dark: #0b8a5a;
+  --secondary-foreground: #f7fafc;
+  --muted: #e2e8f0; /* light gray */
+  --muted-foreground: #718096; /* medium gray */
+  --accent: #04614b; /* watercourse */
+  --accent-light: #99c7be;
+  --accent-dark: #034a3a;
+  --accent-foreground: #f7fafc;
+
+  /* Status */
+  --destructive: #ef4444;
+  --destructive-foreground: oklch(0.985 0 0);
+
+  /* Borders / inputs / focus */
+  --border: #e2e8f0; /* light gray */
+  --input: #ffffff;
+  --ring: #00e27e; /* spring-green */
+
+  /* Charts using the green palette */
+  --chart-1: #04614b; /* watercourse */
+  --chart-2: #0fab70; /* mountain-meadow */
+  --chart-3: #2d987c; /* lochinvar */
+--chart-4: #2cc295; /* shamrock */
+  --chart-5: #00e27e; /* spring-green */
+
+  /* Geometry */
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  /* --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback'; */
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-dark: var(--secondary-dark);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: var(--foreground);
+  }
+
+  /* Accent links */
+  a:not([class]) {
+    color: var(--primary);
+    transition: color 0.2s ease;
+  }
+
+  a:not([class]):hover {
+    color: var(--primary);
+    opacity: 0.8;
+  }
+
+  /* Input styling for dark mode */
+  input, textarea, select {
+    background-color: var(--input);
+    color: var(--foreground);
+    border-color: var(--border);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: rgba(var(--foreground) / 0.4);
+  }
+
+  /* Card border styling */
+  [data-slot="card"] {
+    border-color: var(--border);
+    background-color: rgba(var(--card) / 0.5);
+  }
+
+  /* Smooth transitions */
+  button, a, input, [role="button"] {
+    transition: all 0.2s;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}

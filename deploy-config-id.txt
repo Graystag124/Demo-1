@@ -1,0 +1,10 @@
+Facebook Login Config ID: 1265845242421860 (with fallback to individual scopes)
+Updated OAuth URLs to use config_id instead of individual scopes
+Files updated:
+- lib/meta.ts (added fallback mechanism)
+- app/auth/login/page.tsx (updated to use getMetaAuthUrl)
+- app/auth/sign-up/page.tsx
+- app/auth/meta/connect/page.tsx
+
+Deployment triggered: 2026-02-13
+Status: Config ID 503 error - implemented fallback to individual scopes
