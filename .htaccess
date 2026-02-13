@@ -1,0 +1,96 @@
+# Hostinger Next.js Configuration - Updated for Chunk Loading Issues
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Set correct base path
+RewriteBase /
+
+# Handle static assets explicitly - CRITICAL for chunk loading
+RewriteCond %{REQUEST_URI} ^/_next/static/
+RewriteRule .* - [L]
+
+# Handle public folder assets
+RewriteCond %{REQUEST_URI} ^/(.*\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* - [L]
+
+# Handle API routes
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ index.html [L,QSA]
+
+# Handle all other routes - fallback to index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.html [L,QSA]
+
+# Security headers
+<IfModule mod_headers.c>
+    # Enable CORS for Next.js
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+    
+    # Security headers
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Compression for performance
+<IfModule mod_deflate.c>
+    SetOutputFilter DEFLATE
+    SetEnvIfNoCase Request_URI \
+        \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \
+        \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+    
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# Cache headers for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Static assets - long cache
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType application/x-javascript "access plus 1 year"
+    
+    # Images - long cache
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/ico "access plus 1 year"
+    ExpiresByType image/svg "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    
+    # Fonts - long cache
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    
+    # HTML - shorter cache
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+# Error handling
+ErrorDocument 404 /index.html
+ErrorDocument 500 /index.html
+
+# PHP settings (disable if not needed)
+php_flag display_errors off
+php_value memory_limit 256M
+php_value max_execution_time 300
