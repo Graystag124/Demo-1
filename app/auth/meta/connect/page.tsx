@@ -119,7 +119,7 @@ export default function Page() {
     
     const appId = process.env.NEXT_PUBLIC_META_APP_ID;
     const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/instagram/callback`;
-    const configId = "1238315747827593";
+    const configId = "1265845242421860";
     
     if (!appId) {
       setError("Meta App ID not configured. Please check environment variables.");

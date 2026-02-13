@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   return NextResponse.json({
-    metaAppId: "717766051347061",
+    metaAppId: "1487865925767105",
     isConfigured: true,
     message: "Using hardcoded configuration",
     envCheck: {

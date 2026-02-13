@@ -11,7 +11,7 @@ export async function GET() {
     // Fallback to hardcoded values if environment variables are missing
     const metaAppId = process.env.NEXT_PUBLIC_META_APP_ID || 
                      process.env.META_APP_ID || 
-                     "717766051347061"; // Hardcoded fallback
+                     "1487865925767105"; // Updated Meta App ID
     
     const isConfigured = !!metaAppId;
     

@@ -1,10 +1,11 @@
 Facebook Login Config ID: 1265845242421860 (with fallback to individual scopes)
 Updated OAuth URLs to use config_id instead of individual scopes
 Files updated:
-- lib/meta.ts (added fallback mechanism)
+- lib/meta.ts (added fallback mechanism, updated config ID)
 - app/auth/login/page.tsx (updated to use getMetaAuthUrl)
-- app/auth/sign-up/page.tsx
-- app/auth/meta/connect/page.tsx
+- app/auth/sign-up/page.tsx (updated config ID)
+- app/auth/meta/connect/page.tsx (updated config ID)
+- app/auth/instagram/callback/InstagramCallbackPage.tsx (enhanced error handling, retry button)
 
 Deployment triggered: 2026-02-13
-Status: Config ID 503 error - implemented fallback to individual scopes
+Status: All config IDs updated to 1265845242421860, enhanced error handling added
