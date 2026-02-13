@@ -6,16 +6,48 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Add empty turbopack config to silence the warning
-  turbopack: {},
-  // Keep webpack config for compatibility
-  webpack: (config) => {
+  // Production optimizations for Hostinger
+  output: 'standalone',
+  // Remove turbopack config for production compatibility
+  webpack: (config, { isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': __dirname,
+      '@': process.cwd(),
     };
+    
+    // Fix for chunk loading issues in production
+    if (!isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: -10,
+            chunks: 'all',
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            priority: -20,
+            reuseExistingChunk: true,
+          },
+        },
+      };
+    }
+    
     return config;
   },
+  // Ensure proper asset handling
+  generateEtags: false,
+  // Handle trailing slashes
+  trailingSlash: false,
 }
 
 export default nextConfig
